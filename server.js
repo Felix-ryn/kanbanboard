@@ -5,13 +5,19 @@ const sequelize = require("./src/config/database");
 
 const PORT = process.env.PORT || 5000;
 
-sequelize
-  .sync({ alter: true })
-  .then(() => {
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+
     console.log("Database Connected");
 
     app.listen(PORT, () => {
-      console.log(`Server Running on ${PORT}`);
+      console.log(`Server Running on Port ${PORT}`);
     });
-  })
-  .catch(console.error);
+  } catch (error) {
+    console.error("Database Connection Failed:");
+    console.error(error);
+  }
+}
+
+startServer();
